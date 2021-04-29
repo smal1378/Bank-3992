@@ -1,6 +1,10 @@
 # Bank-3992
-This is a simple bank project, just for learning programming in python and collaborating with github :)
+This is a simple bank project, just for learning programming in Python and collaborating with Github :)
 
+changed made in my fork (siamak)
+
+
+We are working on it now. 
 
 ## God beless us  HTR
 
@@ -36,3 +40,4 @@ ____________________‡¶¶¶¶¶¶†8‡‡88‡8888888‡‡‡‡‡‡‡�
 _____________________†8¶¶¶¶88888¶¶¶¶¶¶¶8‡‡‡‡‡‡‡‡‡†††
 ______________________†‡¶¶¶¶¶¶¶¶¶¶¶¶¶¶888‡‡‡‡‡‡‡8888
 ________________________†8¶¶¶¶¶¶¶¶¶88‡‡‡‡‡‡‡‡‡‡88‡8¶
+
