@@ -3,7 +3,7 @@ This is a simple bank project, just for learning programming in Python and colla
 #
 
 ###### info
-any further about the api's will be explained here to other contributors.
+any further info about the api's will be explained here to other contributors.
 
 ### GUI.py interface:
     class CustomerTop:
