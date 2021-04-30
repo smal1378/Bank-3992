@@ -6,5 +6,3 @@ Frame = tk.Frame
 
 class CustomerAccountInfoView(Frame):
     pass
-
-

@@ -9,4 +9,3 @@ class Manager:
 
 class Customer:
     pass
-
