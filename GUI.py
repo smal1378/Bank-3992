@@ -10,7 +10,8 @@ Toplevel = tk.Toplevel  # you can create a Toplevel class to create themes :)
 
 
 class CustomerTop(Toplevel):
-    # any thing that the backend want to do must be possible by the methods. two examples:
+    # any thing that the backend want to do must be possible by the methods.
+    # two examples:
     def show_error(self, message: str):
         pass
 
