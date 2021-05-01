@@ -1,22 +1,35 @@
 # Bank-3992
-This is a simple bank project, just for learning programming in Python and 
+This is a simple bank project, just to learn programming in Python and 
 collaborating with Github :)
-#
 
-###### info
+---------
+## Code style
+Follow PEP8 whenever possible. Resources:
+ - https://gist.github.com/RichardBronosky/454964087739a449da04
+ - https://pep8.org
+
+###### Info
 any further info about the api's will be explained here to other contributors.
 
 ### GUI.py interface:
-    class CustomerTop:
-    - method_name( list of args ) -> return value info
-        some explanations if needed.
-    - other_method_name()-> None
-    class OtherClass:
-    - method()
+```python
+   class CustomerTop:
+       def method_name( arg0, arg1, arg2, ... ) -> return value info:
+           """some explanations in docstring if needed..."""
+           ...
 
+       def other_method_name() -> None:
+           ...
+
+
+   class OtherClass:
+       def method():
+           ...
+```
 
 ### DS.py interface:
-    all methods are for Core obj
-    - method_name()-> None
-
-
+```python
+ # all methods are for Core obj
+ def method_name()-> None:
+     ...
+```
