@@ -10,6 +10,7 @@ Follow PEP8 whenever possible. Resources:
 
 ###### Info
 any further info about the api's will be explained here to other contributors.
+also read WIT.md for project definition in persian.
 
 ### GUI.py interface:
 ```python
