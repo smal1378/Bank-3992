@@ -32,4 +32,4 @@ jobs:
           python -m pip install flake8
       - name: actual linting
         run: |
-          flake8 DS*.py
+          flake8 DS*
