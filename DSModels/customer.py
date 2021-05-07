@@ -1,13 +1,17 @@
-from userClass import User
+from user import User
+
 
 class Customer(User):
     cash = 0
 
-    def moneyReception(self): #daryaft vajh
+    def moneyReception(self):  # daryaft vajh
         pass
-    def moneyRemitment(self): #enteghal vajh
+
+    def moneyRemitment(self):  # enteghal vajh
         pass
-    def showCash(self): #moshahede mojudi
+
+    def showCash(self):  # moshahede mojudi
         pass
-    def recentTransaction(self) #tarakonesh ha
+
+    def recentTransaction(self):  # tarakonesh ha
         pass
