@@ -8,12 +8,10 @@ class Customer(User):
         self.balance = balance
 
     def money_reception(self, amount): #money_reception: daryaft vajh     amout: mablagh
-        while True:
-            if(amount <= self.balance):
-                self.balance -= amount
-                break
-            else:
-                #return 'There is not enough balance!'
+        if(amount > self.balance):
+            return "There is not enough balance in you account!"
+        else:
+            self.balance -= amount
 
     def money_remitment(self, amount, card_number): #money_reminent: entefgal vajh     card_number: shomare card
         self.balance -= amount
