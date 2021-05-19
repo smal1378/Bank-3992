@@ -3,6 +3,7 @@ from user import User
 
 class Customer(User):
 
+
     def __init__(self, first_name, last_name, username, password, national_code, address, access_level, balance):
         super().__init__(self, first_name, last_name, username, password, national_code, address, access_level)
         self.balance = balance
@@ -21,3 +22,4 @@ class Customer(User):
 
     def recent_transaction(self): #recent_transaction: tarakonesh haye akhir
         pass
+
