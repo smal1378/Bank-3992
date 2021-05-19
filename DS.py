@@ -1,29 +1,63 @@
 # in This Module we define an api for the main.py
 # methods in Core object must be able to do anything we need the backend do
 # other classes, functions or constants can be defined for internal use.
+from DSModels import *
+from dataclasses import dataclass
+from random import randint
 
+dict_error = {1: 'There is not enough money in your account',
+              2: 'There is no such account number '
+              3: 'There is no such user '}
+
+
+@dataclass
 class Core:
-    def __init__(self):
-        self.users = {'customers': {}, 'employees': {},
-                      'accounts': {}, 'branches': {}, 'admin': ''}
+    '''
+    Core part of DS 
+    '''
 
-    def check_login(self, username, password):
-        pass
+    users = {'customers': {}, 'employees': {},
+             'accounts': {}, 'branches': {}, 'admin': ''}
 
-    def create_account(self, username):
-        'return account_number'
+    def check_login(self, username: str, password: str, types: str):
+        ''' 
+        check_login(username=string,password=string,type=between (customers,empolyees,branches,admin))
+        return object if True else return There is no such a user
+        '''
+        if username in users[types].keys() and password == users[types][username].password:
+            return users[types][username]
+        else:
+            return 3  # There is no such a user
 
-    def deposit(self, account_number, amount):
-        pass
+    def create_account(self, username: str, amount=0):
+        '''
+        get username and return account number
+        '''
+        while True:
+            account_number = randint(10**16, (10**17)-1)
 
-    def get_balance(self, username, account_number):
-        pass
+            if account_number not in self.users['accounts'].keys():
+                self.user['custumers'][username].add_account(account_number)
+                self.user['accounts'][account_number] = Account(
+                    balance=amount, account_number=account_number)
+                return account_number
 
-    def withdraw(self, username, account_number, amount):
-        pass
+    def deposit(self, account_number: int, amount: int):
 
-    def funds_transfer(self, username, account_number_1, account_number_2, amount):
-        pass
+        self.users['accounts'][account_number].deposit(amount)
+
+    def get_balance(self, account_number):
+        return self.user['accounts'][account_number].balance
+
+    def withdraw(self, account_number, amount):
+        return self.user['accounts'][account_number].withdraw(amount)
+
+    def funds_transfer(self, account_number_send, account_number_get, amount):
+
+        self.user['accounts'][account_number_send].fund_transfer(
+            amount=amount, account_number_o=account_number_get, types='withdraw')
+        self.user['accounts'][account_number_get].fund_transfer(
+            amount=amount, account_number_o=account_number_send, types='deposit')
 
     def transfer_history(self, username, account_number):
         'return dict'
