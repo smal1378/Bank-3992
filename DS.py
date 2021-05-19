@@ -1,7 +1,7 @@
 # in This Module we define an api for the main.py
 # methods in Core object must be able to do anything we need the backend do
 # other classes, functions or constants can be defined for internal use.
-from DSModels import *
+from DSModels import Account, Manager, Employee, Customer
 from dataclasses import dataclass
 from random import randint
 
@@ -13,19 +13,20 @@ dict_error = {1: 'There is not enough money in your account',
 @dataclass
 class Core:
     '''
-    Core part of DS 
+    Core part of DS
     '''
 
     users = {'customers': {}, 'employees': {},
              'accounts': {}, 'branches': {}, 'admin': ''}
 
     def check_login(self, username: str, password: str, types: str):
-        ''' 
-        check_login(username=string,password=string,type=between (customers,empolyees,branches,admin))
+        '''
+        check_login(username=string,password=string,
+        type=between (customers,empolyees,branches,admin))
         return object if True else return There is no such a user
         '''
-        if username in users[types].keys() and password == users[types][username].password:
-            return users[types][username]
+        if username in self.users[types].keys() and (password == self.users[types][username].password):
+            return self.users[types][username]
         else:
             return 3  # There is no such a user
 
@@ -39,7 +40,7 @@ class Core:
             if account_number not in self.users['accounts'].keys():
                 self.user['custumers'][username].add_account(account_number)
                 self.user['accounts'][account_number] = Account(
-                    balance=amount, account_number=account_number)
+                    balance=amount, account_number=account_number, owner=username)
                 return account_number
 
     def deposit(self, account_number: int, amount: int):
