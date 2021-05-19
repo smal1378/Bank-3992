@@ -68,7 +68,7 @@ class Account:
     '''
     balance: int
     owner: str
-    history = {'withdraw': {}, 'deposit': {}, 'fund_transfer'}
+    history = {'withdraw': {}, 'deposit': {}, 'fund_transfer': {}}
     account_number: int
 
     def withdraw(self, amount: int):

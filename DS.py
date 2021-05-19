@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from random import randint
 
 dict_error = {1: 'There is not enough money in your account',
-              2: 'There is no such account number '
+              2: 'There is no such account number ',
               3: 'There is no such user '}
 
 
