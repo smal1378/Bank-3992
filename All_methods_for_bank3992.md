@@ -1,15 +1,15 @@
 
 # Core:
-	global users:
+###### global users:
 - user_detail_change(username, **kwargs)
 - get_user(username)
-	branchs:
+###### branchs:
 - create_branch(name, address)
 - del_branch(name)
 - change_branch(name, new_name=None, new_address=None)
 - all_branch_employees(branch_name)
 - set_branch_manager(branch_name, manager_username)
-	accounts:
+###### accounts:
 - create_account(username, amount=0) -> account_number
 - del_account(account_number)
 - deposit(account_number, amount)
@@ -18,18 +18,18 @@
 - funds_transfer(account_number_sender, account_number_receiver, amount)
 - transfer_history(account_number)
 - get_account_numbers(username)
-	customers:
+###### customers:
 - create_customer(name, username, id, birthday, password)
 - search_customers(text)
 - all_customers()
-	managers:
+###### managers:
 - create_manager(name, id, username, password)
 - all_managers()
-	employees:
+###### employees:
 - create_employee(name, id, username, password)
 - del_employee(username)
 - all_employees()
-	other:
+###### other:
 - check_login(username, password) -> user_object
 
 
@@ -72,11 +72,3 @@
 - open_customer_panel(username)
 - create_customer(name, username, id, birthday, password)
 - set_my_info(username=None, password=None)
-- 
-
-
-
-
-
-
-
