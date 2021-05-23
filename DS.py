@@ -7,7 +7,9 @@ from random import randint
 
 dict_error = {1: 'There is not enough money in your account',
               2: 'There is no such account number ',
-              3: 'There is no such user '}
+              3: 'There is no such user ',
+              4: 'The username is already exist',
+              5: 'Password is wrong'}
 
 
 @dataclass
@@ -25,7 +27,8 @@ class Core:
         type=between (customers,empolyees,branches,admin))
         return object if True else return There is no such a user
         '''
-        if username in self.users[types].keys() and (password == self.users[types][username].password):
+        if username in self.users[types].keys() and (
+                password == self.users[types][username].password):
             return self.users[types][username]
         else:
             return 3  # There is no such a user
@@ -60,38 +63,67 @@ class Core:
         self.user['accounts'][account_number_get].fund_transfer(
             amount=amount, account_number_o=account_number_send, types='deposit')
 
-    def transfer_history(self, username, account_number):
-        'return dict'
-        pass
+    def account_history(self, account_number, types=None):
+        '''
+        transfer_history(account_number=integer,types=(withdraw,deposit,fund_transfer))
+        '''
+        if types == None:
+            return self.users['accounts'][account_number].history.values()
+        else:
+            return self.users['accounts'][account_number].history[types]
 
-    def get_account_numbers(self, username):
-        'return int'
-        pass
+    def customer_history(self, username: str):
+        return self.users['customers'][username].history.values()
 
-    def all_accounts(self, username):
-        'return accounts obj'
-        pass
+    def get_account_numbers(self, username: str):
+        ''' return list of accounts number'''
 
-    def change_username(self, old_username, new_username):
-        pass
+        return self.users['customers'][username].accounts
 
-    def change_password(self, username, old_password, new_password):
-        pass
+    def all_accounts(self, username: str):
+        '''return accounts obj'''
+        accounts = self.get_account_numbers(username)
+        return (self.users['accounts'][i] for i in accounts)
 
-    def create_user(self, user_type):
-        pass
+    def change_username(self, old_username, new_username, types):
+        '''
+        change_username(old_username=string,new_username=string,types=(customers,branches,employees))
+        '''
+        if new_username in self.users[types].keys():
+            return 4  # username is already exist
+        else:
+            self.users[types][new_username] = self.users[types][old_username]
+            del self.users[types][old_username]
+
+    def change_password(self, username: str, old_password: str, new_password: str, types):
+        '''
+        change_password(username=string,old_paasword=string,new_password=str,types=(customers,branches,employees))
+        '''
+
+        if old_password == self.users[types][username].password:
+            self.users[types][username].password = new_password
+        else:
+            return 5  # password is wrong
 
     def search_user(self, username):
-        pass
+        '''return an object if exist else return 3'''
+        for i in self.users.keys():
+            for j in i:
+                if username == self.users[i][j].username:
+                    return self.users[i][j]
+        return 3  # there is not such a user
 
-    def add_account(self, username):
-        pass
-
-    def del_account(self, username, account_number):
-        pass
+    def del_account(self, username: str, account_number: int):
+        del self.users['accounts'][account_number]
+        self.users['customers'][username].accounts.remove(account_number)
 
     def user_detail(self, username):
-        pass
+        'return list of methods if exists else return 3'
+        user = search_user(username)
+        if user == 3:
+            return 3  # there is no such a user
+        else:
+            return
 
     def user_detail_change(self, username, **kwarg):
         pass

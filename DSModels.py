@@ -44,8 +44,7 @@ class Customer(User):
     it inherits from user class
     '''
     accounts: []
-    history = {'show_balance': {}, 'add_acount': {},
-               'withdraw': {}}
+    history = {'show_balance': {}, 'add_acount': {}}
 
     def show_balance(self, account_number: int):
         if account_number in self.accounts:
@@ -98,3 +97,6 @@ class Account:
             self.balance += amount
             self.history['fund_transfer'][datetime.now(
             )] = f'get {amount} from {account_number_o}'
+
+class Branches:
+    pass
