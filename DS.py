@@ -170,7 +170,7 @@ class Core:
                 user.key = value
 
     def create_customer(self, first_name: str, last_name: str, username: str,
-                        password:str, ID: str, address: str):
+                        password: str, ID: str, address: str):
         '''
         Customer(first_name:string ,last_name:string,username:string,
         password:string,ID:string,address:string)
@@ -178,7 +178,7 @@ class Core:
         '''
         if username not in self.users['customers']:
             customer = Customer(first_name=first_name, last_name=last_name,
-                                username=username,password=password,
+                                username=username, password=password,
                                 ID=ID, address=address)
             self.users['customers'][username] = customer
             return customer
@@ -219,7 +219,7 @@ class Core:
         '''
         if username not in self.users['employees']:
             employee = Employee(first_name=first_name, last_name=last_name,
-                                username=username, ID=ID,password=password,
+                                username=username, ID=ID, password=password,
                                 address=address, salary=salary)
             self.users['employees'][username] = employee
             return employee
