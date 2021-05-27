@@ -178,7 +178,7 @@ class Core:
         '''
         if username not in self.users['customers']:
             customer = Customer(first_name=first_name, last_name=last_name,
-                                username=username,password=password
+                                username=username,password=password,
                                 ID=ID, address=address)
             self.users['customers'][username] = customer
             return customer
