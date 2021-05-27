@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 
@@ -39,11 +39,11 @@ class Employee(User):
 @dataclass
 class Customer(User):
     '''
-    Employee(first_name:string ,last_name:string,username:string,
+    Customer(first_name:string ,last_name:string,username:string,
     password:string,ID:string,address:string)
     it inherits from user class
     '''
-    accounts: []
+    accounts: list[int] = field(default_factory=list)
     history = {'show_balance': {}, 'add_acount': {}}
 
     def show_balance(self, account_number: int):
@@ -63,7 +63,7 @@ class Customer(User):
 @dataclass
 class Account:
     '''
-    Account(balance=integer,owner,account_number)
+    Account(balance=integer,owner=string,account_number=integer)
     '''
     balance: int
     owner: str
@@ -98,5 +98,13 @@ class Account:
             self.history['fund_transfer'][datetime.now(
             )] = f'get {amount} from {account_number_o}'
 
-class Branches:
-    pass
+
+@dataclass
+class Branch:
+    '''
+    Branch(address=string,name=string)
+    '''
+    address: str
+    name: str
+    manager: str = ''
+    employees: list[int] = field(default_factory=list)
