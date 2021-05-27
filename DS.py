@@ -98,9 +98,8 @@ class Core:
         if types is None:
             return (j for i in self.users['accounts'][
                 account_number].history.values() for j in i.items())
-        else:
-            return (i for i in self.users['accounts'][
-                account_number].history[types].items())
+        return (i for i in self.users['accounts'][
+            account_number].history[types].items())
 
     def customer_history(self, username: str):
         return (j for i in self.users['customers'][
@@ -122,9 +121,8 @@ class Core:
         '''
         if new_username in self.users[types]:
             return 4  # username is already exist
-        else:
-            self.users[types][new_username] = self.users[types][old_username]
-            del self.users[types][old_username]
+        self.users[types][new_username] = self.users[types][old_username]
+        del self.users[types][old_username]
 
     def change_password(self, username: str, old_password: str,
                         new_password: str, types):
@@ -172,7 +170,7 @@ class Core:
                 user.key = value
 
     def create_customer(self, first_name: str, last_name: str, username: str,
-                        password, ID: str, address: str):
+                        password:str, ID: str, address: str):
         '''
         Customer(first_name:string ,last_name:string,username:string,
         password:string,ID:string,address:string)
@@ -180,7 +178,8 @@ class Core:
         '''
         if username not in self.users['customers']:
             customer = Customer(first_name=first_name, last_name=last_name,
-                                username=username, ID=ID, address=address)
+                                username=username,password=password
+                                ID=ID, address=address)
             self.users['customers'][username] = customer
             return customer
         return 4  # the username is already exists
@@ -220,7 +219,7 @@ class Core:
         '''
         if username not in self.users['employees']:
             employee = Employee(first_name=first_name, last_name=last_name,
-                                username=username, ID=ID,
+                                username=username, ID=ID,password=password,
                                 address=address, salary=salary)
             self.users['employees'][username] = employee
             return employee
