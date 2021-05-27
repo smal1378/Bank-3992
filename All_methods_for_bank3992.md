@@ -72,3 +72,6 @@
 - open_customer_panel(username)
 - create_customer(name, username, id, birthday, password)
 - set_my_info(username=None, password=None)
+
+# GUI Login Callbacks:
+- check_login(username, password) -> message
