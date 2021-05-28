@@ -35,7 +35,6 @@ class Manager(Employee):
     Manager(first_name:string ,last_name:string,username:string,
     password:string,ID:string,address:string,salary:integer)
     '''
-    pass
 
 
 @dataclass
@@ -67,8 +66,8 @@ class Account:
 
     def show_balance(self):
         ''' return integer (balance)'''
-        self.history['show_balance'][datetime.now(
-        )] = f'balance => {self.balance}'  # add to history
+        self.history['show_balance'][
+            datetime.now()] = f'balance => {self.balance}'  # add to history
         return self.balance
 
     def withdraw(self, amount: int, types='withdraw_mode',
@@ -85,7 +84,7 @@ class Account:
         self.balance -= amount
         if types == 'withdraw_mode':
             # add to history
-            self.history['deposit'][datetime.now()] = f'deposit => {amount} '
+            self.history['withdraw'][datetime.now()] = f'withdraw => {amount} '
         elif types == 'fund_transfer_mode':
             self.history['fund_transfer'][datetime.now(  # add to history
             )] = f'send => {amount} to => {account_number_o}'
@@ -102,8 +101,8 @@ class Account:
             return 7  # number is smaller or equal to 0
 
         if types == 'deposit_mode':
-            self.history['withdraw'][datetime.now(
-            )] = f'withdraw => {amount} '  # add to history
+            self.history['deposit'][datetime.now(
+            )] = f'deposit => {amount} '  # add to history
         elif types == 'fund_transfer_mode':
             self.history['fund_transfer'][datetime.now(  # add to history
             )] = f'get {amount} from {account_number_o}'
