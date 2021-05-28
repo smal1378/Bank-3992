@@ -34,7 +34,6 @@ class Core:
         '''set_admin also can be used for change password or username'''
         self.users['admin'] = {'username': username, 'password': password}
 
-
 # ===========================global part=================================
 
     def check_login(self, username: str, password: str, types: str):
@@ -100,7 +99,6 @@ class Core:
         for key, value in kwargs.items():
             if key in attributes:
                 user.key = value
-
 
 # ==========================account part================================
 
@@ -177,7 +175,6 @@ class Core:
             return self.users['accounts'][account_number]
         return 2  # there is no such a account_number
 
-
 # =========================customer part===============================
 
     def customer_history(self, username: str):
@@ -202,9 +199,7 @@ class Core:
     def get_all_customers(self):
         return (i for i in self.user['customers'].values())
 
-
 # ==========================manager part===============================
-
     def create_manager(self, first_name: str, last_name: str, username: str,
                        password: str, ID: str, address: str, salary: int):
         '''
