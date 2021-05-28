@@ -28,10 +28,14 @@ class Core:
              'branches': {},
              'admin': '',
              'managers': {}}
+# ============================admin part=================================
 
     def set_admin(self, username: str, password: str):
         '''set_admin also can be used for change password or username'''
         self.users['admin'] = {'username': username, 'password': password}
+
+
+# ===========================global part=================================
 
     def check_login(self, username: str, password: str, types: str):
         '''
@@ -47,6 +51,58 @@ class Core:
                 password == self.users[types][username].password):
             return self.users[types][username]
         return 3  # There is no such a username
+
+    def change_username(self, old_username, new_username, types):
+        '''
+        change_username(old_username=string,new_username=string,types=(customers,branches,employees,managers))
+        '''
+        if new_username in self.users[types]:
+            return 4  # username is already exist
+        self.users[types][new_username] = self.users[types][old_username]
+        del self.users[types][old_username]
+
+    def change_password(self, username: str, old_password: str,
+                        new_password: str, types):
+        '''
+        change_password(username=string,old_paasword=string,new_password=str,
+        types=(customers,branches,employees,managers))
+        '''
+
+        if old_password == self.users[types][username].password:
+            self.users[types][username].password = new_password
+        else:
+            return 5  # password is wrong
+
+    def search_user(self, username: str, types=None):
+        '''
+        search_user(username=string,types=(customers,branches,employees,managers))
+        return an object if exist else return 3 '''
+        if types in self.users:
+            if username in self.users[types]:
+                return self.users[types][username]
+        else:
+            for i in self.users:
+                for j in i:
+                    if username == self.users[i][j].username:
+                        return self.users[i][j]
+            return 3  # there is no such a username
+
+    def user_detail_change(self, username, **kwargs):
+        '''
+        User(first_name=string,last_name=string,ID=string,address=string)
+        Manager(salary=integer)
+        employee(salary=integer)
+        '''
+        user = self.search_user(username)
+        if user == 3:
+            return 3  # there is no such a username
+        attributes = vars(user)  # all methods of user
+        for key, value in kwargs.items():
+            if key in attributes:
+                user.key = value
+
+
+# ==========================account part================================
 
     def create_account(self, username: str, amount=0):
         '''
@@ -101,10 +157,6 @@ class Core:
         return (i for i in self.users['accounts'][
             account_number].history[types].items())
 
-    def customer_history(self, username: str):
-        return (j for i in self.users['customers'][
-            username].history.values() for j in i.items())
-
     def get_account_numbers(self, username: str):
         ''' return list of accounts number'''
 
@@ -115,59 +167,22 @@ class Core:
         accounts = self.get_account_numbers(username)
         return (self.users['accounts'][i] for i in accounts)
 
-    def change_username(self, old_username, new_username, types):
-        '''
-        change_username(old_username=string,new_username=string,types=(customers,branches,employees,managers))
-        '''
-        if new_username in self.users[types]:
-            return 4  # username is already exist
-        self.users[types][new_username] = self.users[types][old_username]
-        del self.users[types][old_username]
-
-    def change_password(self, username: str, old_password: str,
-                        new_password: str, types):
-        '''
-        change_password(username=string,old_paasword=string,new_password=str,
-        types=(customers,branches,employees,managers))
-        '''
-
-        if old_password == self.users[types][username].password:
-            self.users[types][username].password = new_password
-        else:
-            return 5  # password is wrong
-
-    def search_user(self, username: str, types=None):
-        '''
-        search_user(username=string,types=(customers,branches,employees,managers))
-        return an object if exist else return 3 '''
-        if types in self.users:
-            if username in self.users[types]:
-                return self.users[types][username]
-        else:
-            for i in self.users:
-                for j in i:
-                    if username == self.users[i][j].username:
-                        return self.users[i][j]
-            return 3  # there is no such a username
-
     def del_account(self, account_number: int):
         owner = self.users['accounts'][account_number].owner
         self.users['customers'][owner].accounts.remove(account_number)
         del self.users['accounts'][account_number]
 
-    def user_detail_change(self, username, **kwargs):
-        '''
-        User(first_name=string,last_name=string,ID=string,address=string)
-        Manager(salary=integer)
-        employee(salary=integer)
-        '''
-        user = self.search_user(username)
-        if user == 3:
-            return 3  # there is no such a username
-        attributes = vars(user)  # all methods of user
-        for key, value in kwargs.items():
-            if key in attributes:
-                user.key = value
+    def search_account(self, account_number):
+        if account_number in self.users['accounts']:
+            return self.users['accounts'][account_number]
+        return 2  # there is no such a account_number
+
+
+# =========================customer part===============================
+
+    def customer_history(self, username: str):
+        return (j for i in self.users['customers'][
+            username].history.values() for j in i.items())
 
     def create_customer(self, first_name: str, last_name: str, username: str,
                         password: str, ID: str, address: str):
@@ -184,10 +199,11 @@ class Core:
             return customer
         return 4  # the username is already exists
 
-    def search_account(self, account_number):
-        if account_number in self.users['accounts']:
-            return self.users['accounts'][account_number]
-        return 2  # there is no such a account_number
+    def get_all_customers(self):
+        return (i for i in self.user['customers'].values())
+
+
+# ==========================manager part===============================
 
     def create_manager(self, first_name: str, last_name: str, username: str,
                        password: str, ID: str, address: str, salary: int):
@@ -207,6 +223,10 @@ class Core:
 
     def get_all_managers(self):
         return (i for i in self.users['managers'].values())
+
+# ==========================employee part==============================
+    def get_all_employees(self):
+        return (i for i in self.users['employees'].values)
 
     def create_employee(self, first_name: str,
                         last_name: str, username: str,
@@ -231,6 +251,7 @@ class Core:
         else:
             return 3  # there is no such a username
 
+# ==========================branch part===============================
     def create_branch(self, username: str, address: str):
         """
         branch(username=string,address=string)
@@ -281,9 +302,3 @@ class Core:
         if username not in self.users['managers']:
             return 3  # there is no such a username
         self.users['branches'][branch_name].manager = username
-
-    def get_all_employees(self):
-        return (i for i in self.users['employees'].values)
-
-    def get_all_customers(self):
-        return (i for i in self.user['customers'].values())
