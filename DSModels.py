@@ -99,13 +99,13 @@ class Account:
         self.balance += amount
         if amount <= 0:
             return 7  # number is smaller or equal to 0
-
+        time = datetime.now()
         if types == 'deposit_mode':
-            self.history['deposit'][datetime.now(
-            )] = f'deposit => {amount} '  # add to history
+            # add to history
+            self.history['deposit'][time] = f'deposit => {amount} '
         elif types == 'fund_transfer_mode':
-            self.history['fund_transfer'][datetime.now(  # add to history
-            )] = f'get {amount} from {account_number_o}'
+            self.history['fund_transfer'][
+                time] = f'get => {amount} from => {account_number_o}'
 
     def fund_transfer(self, amount: int, account_number_o, types):
         '''
