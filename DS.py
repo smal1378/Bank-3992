@@ -49,7 +49,7 @@ class Core:
         if types == 'admin':
             return users['username'] == username and (
                 users['password'] == password)
-        elif username in users and (
+        if username in users and (
                 password == users[username].password):
             return users[username]
         return 3  # There is no such a username
@@ -94,12 +94,11 @@ class Core:
         if self.users.get(types):
             user_ = self.users.get(types).get(username)
             return user_ if user_ else 3
-        else:
-            if not only_with_types:
-                for group in self.users:
-                    user = self.users[group].get(username)
-                    if user:
-                        result.append(user)
+        if not only_with_types:
+            for group in self.users:
+                user = self.users[group].get(username)
+                if user:
+                    result.append(user)
         return result if result else 3  # thereis no such a username
 
     def user_detail_change(self, username, types, **kwargs):
