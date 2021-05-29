@@ -82,12 +82,13 @@ class Account:
         elif amount <= 0:
             return 7  # number is smalller or equal to 0
         self.balance -= amount
+        time = datetime.now()
         if types == 'withdraw_mode':
             # add to history
-            self.history['withdraw'][datetime.now()] = f'withdraw => {amount} '
+            self.history['withdraw'][time] = f'withdraw => {amount} '
         elif types == 'fund_transfer_mode':
-            self.history['fund_transfer'][datetime.now(  # add to history
-            )] = f'send => {amount} to => {account_number_o}'
+            self.history['fund_transfer'][  # add to history
+                time] = f'send => {amount} to => {account_number_o}'
 
     def deposit(self, amount: int, types='deposit_mode',
                 account_number_o=None):
@@ -110,17 +111,13 @@ class Account:
     def fund_transfer(self, amount: int, account_number_o, types):
         '''
         fund_transfer(amount=integer,
-        account_number_o=sender or getter account number ,
+        account_number_o=sender or receiver account number ,
         types=choose withdraw if you send money else choose deposit))
         '''
         if types == 'withdraw':
-            self.withdraw(
-                amount=amount, account_number_o=account_number_o,
-                types='fund_transfer_mode')
+            self.withdraw(**locals())
         elif types == 'deposit':
-            self.deposit(
-                amount=amount, account_number_o=account_number_o,
-                types='fund_transfer_mode')
+            self.deposit(**locals())
 
 
 @dataclass
