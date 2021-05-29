@@ -115,7 +115,7 @@ class Account:
         elif amount <= 0:
             return 7  # number is smalller or equal to 0
         self.balance -= amount
-        if history == True:
+        if history:
             self.add_to_history('withdraw', amount=amount)
 
     def deposit(self, amount: int, history=True):
@@ -125,14 +125,15 @@ class Account:
         self.balance += amount
         if amount <= 0:
             return 7  # number is smaller or equal to 0
-        if history == True:
+        if history:
             self.add_to_history('deposit', amount=amount)
 
     def fund_transfer(self, amount: int, account_num: int, types):
         '''
         fund_transfer(amount=integer,
         account_num=sender or receiver account number ,
-        types=choose transfer_withdraw if you send money else choose transfer_deposit))
+        types=choose transfer_withdraw if you send money
+        else choose transfer_deposit))
         '''
         var = vars()
         var.pop('self')

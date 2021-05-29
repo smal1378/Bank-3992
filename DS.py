@@ -201,10 +201,12 @@ class Core:
 # =========================customer part===============================
 
     def customer_history(self, username: str):
-        """ return histoy if username exists else 3 (there is no such a user name ) """
+        """ return histoy if username exists
+        else 3 (there is no such a user name ) """
         customer = self.users['customers'].get(username)
         # there is no such a username
-        return (j for i in customer.history.values() for j in i.items()) if customer else 3
+        return (j for i in customer.history.values() for j in i.items())\
+            if customer else 3
 
     def create_customer(self, first_name: str, last_name: str, username: str,
                         password: str, ID: str, address: str):
