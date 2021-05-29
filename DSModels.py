@@ -137,10 +137,14 @@ class Account:
         var = vars()
         var.pop('self')
         if types == 'transfer_withdraw':
-            self.withdraw(amount=amount, history=False)
+            result = self.withdraw(amount=amount, history=False)
+            if result:
+                return result
             self.add_to_history(**var)
         elif types == 'transfer_deposit':
-            self.deposit(amount=amount, history=False)
+            result = self.deposit(amount=amount, history=False)
+            if result:
+                return result
             self.add_to_history(**var)
 
 
