@@ -50,7 +50,7 @@ class Core:
             return users['username'] == username and (
                 users['password'] == password)
         elif username in users and (
-                password == getattr(users[username], 'password')):
+                password == users[username].password):
             return users[username]
         return 3  # There is no such a username
 
@@ -81,7 +81,7 @@ class Core:
         return 5 if password is wrong
         '''
         user = self.users[types][username]
-        if old_password == getattr(user, 'password'):
+        if old_password == user.password:
             setattr(user, 'password', new_password)
         else:
             return 5  # password is wrong
