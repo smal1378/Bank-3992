@@ -6,6 +6,7 @@ Employee => parent class for Manager
 """
 from dataclasses import dataclass, field
 from datetime import datetime
+from time import sleep
 
 
 @dataclass
@@ -46,11 +47,21 @@ class Customer(User):
     accounts: list[int] = field(default_factory=list)
     history = {'add_account': {}}
 
+    def add_to_history(self, types, **kwargs):
+        """
+        add_to_history(types=(add_account))
+        add_account => (add_account,account_number=integer)
+        """
+        sleep(.00001)
+        time = datetime.now()
+        if types == 'add_account':
+            self.history[types][time] = \
+                f'add account with number => {kwargs["account_number"]}'
+
     def add_account(self, account_number: int):
         '''get account_number and return nothing'''
         self.accounts.append(account_number)
-        self.history['add_account'][datetime.now(  # add to history
-        )] = f'add account with number => {account_number}'
+        self.add_to_history('add_account', account_number=account_number)
 
 
 @dataclass
@@ -64,63 +75,76 @@ class Account:
     history = {'withdraw': {}, 'deposit': {},
                'fund_transfer': {}, 'show_balance': {}}
 
+    def add_to_history(self, types, **kwargs):
+        """
+        add_to_history(types=(withdraw,deposit,fund_transfer_withdraw,fund_transfer_deposit,balance))
+        withdraw => (withdraw,amount=integer)
+        deposit => (deposit,amount=integer)
+        transfer_deposit => (fund_transfer_deposit,amount=integer,
+        account_num=account number of sender or receiver)
+        transfer_withdraw => (fund_transfer_withdraw,amount=integer,
+        account_num= account number of sender or receiver)
+        balance => (balance)
+        """
+        sleep(.00001)
+        time = datetime.now()
+        if types == 'withdraw':
+            self.history[types][time] = f'withdraw => {kwargs["amount"]} '
+        elif types == 'deposit':
+            self.history[types][time] = f'deposit => {kwargs["amount"]} '
+        elif types == 'transfer_withdraw':
+            self.history['fund_transfer'][time] = \
+                f'send => {kwargs["amount"]} to => {kwargs["account_num"]}'
+        elif types == 'transfer_deposit':
+            self.history['fund_transfer'][time] = \
+                f'get => {kwargs["amount"]} from => {kwargs["account_num"]}'
+        elif types == 'balance':
+            self.history['show_balance'][time] = f'balance => {self.balance}'
+
     def show_balance(self):
         ''' return integer (balance)'''
-        self.history['show_balance'][
-            datetime.now()] = f'balance => {self.balance}'  # add to history
+        self.add_to_history('balance')
         return self.balance
 
-    def withdraw(self, amount: int, types='withdraw_mode',
-                 account_number_o=None):
+    def withdraw(self, amount: int, history=True):
         '''
-        withdraw (amount=integer,types= choose withdraw_mode for withdraw money
-        else choose fund_transfer_mode,
-        account_number_o=another account_number for fund_transfer_mode )
+        withdraw (amount=integer)
         '''
         if amount > self.balance:
             return 1  # There is not enough money in your account
         elif amount <= 0:
             return 7  # number is smalller or equal to 0
         self.balance -= amount
-        time = datetime.now()
-        if types == 'withdraw_mode':
-            # add to history
-            self.history['withdraw'][time] = f'withdraw => {amount} '
-        elif types == 'fund_transfer_mode':
-            self.history['fund_transfer'][  # add to history
-                time] = f'send => {amount} to => {account_number_o}'
+        if history == True:
+            self.add_to_history('withdraw', amount=amount)
 
-    def deposit(self, amount: int, types='deposit_mode',
-                account_number_o=None):
+    def deposit(self, amount: int, history=True):
         '''
-        deposit(amount=integer,types=choose deposit_mode for deposit
-        else choose fund_transfer_mode,
-        account_number_o=another account_number for fund_transfer_mode)
+        deposit(amount=integer)
         '''
         self.balance += amount
         if amount <= 0:
             return 7  # number is smaller or equal to 0
-        time = datetime.now()
-        if types == 'deposit_mode':
-            # add to history
-            self.history['deposit'][time] = f'deposit => {amount} '
-        elif types == 'fund_transfer_mode':
-            self.history['fund_transfer'][
-                time] = f'get => {amount} from => {account_number_o}'
+        if history == True:
+            self.add_to_history('deposit', amount=amount)
 
-    def fund_transfer(self, amount: int, account_number_o, types):
+    def fund_transfer(self, amount: int, account_num: int, types):
         '''
         fund_transfer(amount=integer,
-        account_number_o=sender or receiver account number ,
-        types=choose withdraw if you send money else choose deposit))
+        account_num=sender or receiver account number ,
+        types=choose transfer_withdraw if you send money else choose transfer_deposit))
         '''
-        if types == 'withdraw':
-            self.withdraw(**locals())
-        elif types == 'deposit':
-            self.deposit(**locals())
+        var = vars()
+        var.pop('self')
+        if types == 'transfer_withdraw':
+            self.withdraw(amount=amount, history=False)
+            self.add_to_history(**var)
+        elif types == 'transfer_deposit':
+            self.deposit(amount=amount, history=False)
+            self.add_to_history(**var)
 
 
-@dataclass
+@ dataclass
 class Branch:
     '''
     Branch(address=string,name=string)

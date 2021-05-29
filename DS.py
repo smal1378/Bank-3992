@@ -45,13 +45,13 @@ class Core:
         else return 3 (There is no such a username)
 
         '''
-        user = self.users[types]
+        users = self.users[types]
         if types == 'admin':
-            return user['username'] == username and (
-                user['password'] == password) if True else 3
-        if username in user and (
-                password == getattr(user[username], 'password')):
-            return user[username]
+            return users['username'] == username and (
+                users['password'] == password) if True else 3
+        if username in users and (
+                password == getattr(users[username], 'password')):
+            return users[username]
         return 3  # There is no such a username
 
     def change_username(self, old_username, new_username, types):
@@ -115,6 +115,7 @@ class Core:
         customers = self.users['customers']
         if username not in customers:
             return 3  # There is no such a username
+
         while True:
             account_number = randint(10**16, (10**17)-1)
 
