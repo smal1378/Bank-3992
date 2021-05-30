@@ -26,15 +26,16 @@ class User:
 class Employee(User):
     '''
     Employee(first_name:string ,last_name:string,username:string,
-    password:string,ID:string,address:string,salary:integer)
+    password:string,ID:string,address:string,salary:integer,branch='')
     '''
     salary: int
+    branch: str = ''
 
 
 class Manager(Employee):
     '''
-    Manager(first_name:string ,last_name:string,username:string,
-    password:string,ID:string,address:string,salary:integer)
+    Manager(first_name=string ,last_name:string,username=string,
+    password=string,ID=string,address=string,salary=integer,branch='')
     '''
 
 

@@ -269,8 +269,12 @@ class Core:
         return 4  # username already exists
 
     def del_employee(self, username):
-        if username in self.users['employees']:
-            del self.users['employees'][username]
+        employees = self.users['employees']
+        if username in employees:
+            branch = self.user[username].branch
+            if branch:
+                self.del_branch_employee(branch, username)
+            del employees[username]
         else:
             return 3  # there is no such a username
 
@@ -304,6 +308,15 @@ class Core:
         if username not in self.users['employees']:
             return 3  # there is no such a username
         self.users['branches'][branch_name].employees.append(username)
+
+    def del_branch_employee(self, branch_name, username):
+        if branch_name not in self.users['branches']:
+            return 6  # there is no such a branch
+        if username not in self.users['employees']:
+            return 3  # there is no such a username
+        employees = self.users['branches'][branch_name].employees
+        if username in employees:
+            employees.remove(username)
 
     def change_branch_details(self, branch_name, **kwargs):
         branches = self.users['branches']
