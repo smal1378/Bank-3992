@@ -1,11 +1,11 @@
-from gui_configuration import Tk, Button, Frame
-from edit_user_view import EditUserView
-from edit_me_view import EditMeView
-from add_user_view import AddUserView
 import tkinter as tk 
 from tkinter import ttk
+from add_user_view import AddUserView
+from edit_me_view import EditMeView
+from edit_user_view import EditUserView
+from gui_configuration import Tk, Button, Frame, Label
 
- 
+
 class ManagerView(Tk):
     '''
     This class creates manager panel.
@@ -30,7 +30,6 @@ class ManagerView(Tk):
         self.callback5 = callback5  # search()
         self.callback6 = callback6  # set_my_info()
         self.title(f"Panel manager: {self.name}")
-        self.bind("<Configure>", self.auto_geometry)
         #self.icon (may add it)
         self.resizable(False, False)
         self.tabs = ttk.Notebook(self)
@@ -48,7 +47,7 @@ class ManagerView(Tk):
         
         # Defining Tab-main frames
         self.fr_aboutme = tk.LabelFrame(self.tab_main, text = "About me",
-                                        bg = "gray")
+                                        bg = "#00a693")
         self.fr_aboutme.grid(row = 0, column = 0, rowspan = 2, padx = 10)
         self.fr_seachbar = Frame(self.tab_main)
         self.fr_seachbar.grid(row = 0, column = 1)
@@ -58,16 +57,16 @@ class ManagerView(Tk):
         self.fr_edit.grid(row = 1, column = 2)
         
         # Frame about
-        self.lbl_name = tk.Label(self.fr_aboutme, text = "Name:")
+        self.lbl_name = Label(self.fr_aboutme, text = "Name:")
         self.lbl_name.grid(row = 0, column = 0,
                            sticky = "w", padx = 10, pady = 5)
-        self.lbl_name = tk.Label(self.fr_aboutme, text = self.name)
+        self.lbl_name = Label(self.fr_aboutme, text = self.name)
         self.lbl_name.grid(row = 0, column = 1,
                            sticky = "w", padx = 10, pady = 5)
-        self.lbl_username = tk.Label(self.fr_aboutme, text = "Username:")
+        self.lbl_username = Label(self.fr_aboutme, text = "Username:")
         self.lbl_username.grid(row = 1, column = 0,
                                sticky = "w", padx = 10, pady = 5)
-        self.lbl_username = tk.Label(self.fr_aboutme, text = self.username)
+        self.lbl_username = Label(self.fr_aboutme, text = self.username)
         self.lbl_username.grid(row = 1, column = 1,
                                sticky = "w", padx = 10, pady = 5)
         self.btn_edit_me = Button(self.fr_aboutme, text = "Edit",
@@ -76,8 +75,9 @@ class ManagerView(Tk):
         self.btn_edit_me.grid(row = 2, column = 0, columnspan = 2, pady = 5)    
         
         # Frame search bar
-        self.search_bar = tk.Entry(self.fr_seachbar, width = 50)
+        self.search_bar = tk.Entry(self.fr_seachbar, width = 21)
         self.search_bar.grid(row = 0, column = 0, pady = 10)
+        self.search_bar.bind("<Return>", lambda _: self.btn_search.invoke())
         self.btn_search = Button(self.fr_seachbar, text = "search", 
                                  command = self.search_treev) 
         self.btn_search.grid(row = 0, column = 1, padx = 5)
@@ -222,23 +222,6 @@ class ManagerView(Tk):
         
         self.tabs.forget(self.tabs.select())
         
-    def auto_geometry(self, event):
-        '''
-        screen sizes are actually your resolution. e.g. mine is 1600*900.
-        tk sizes are size of panel created by this class(ManagerView).
-        more widgets within this class, more tk size.
-        '''
-        
-        screen_w = self.winfo_screenwidth()
-        screen_h = self.winfo_screenheight()
-        tk_w= self.winfo_width()
-        tk_h = self.winfo_height()
-        place_x = int(screen_w / 2) - int(tk_w /2)
-        place_y = int(screen_h / 2) - int(tk_h / 2)
-        if tk_w != 1 and tk_h != 1:
-            self.geometry(f"{tk_w}x{tk_h}+{place_x}+{place_y}")
-            self.unbind("<Configure>")  # need it here, trust me.   
-            
     def run(self):
         self.mainloop()
         

@@ -1,5 +1,6 @@
-from gui_configuration import Button, Frame
 import tkinter as tk
+from gui_configuration import Button, Frame, Label
+
 
 class AddUserView(Frame):
     '''
@@ -14,18 +15,22 @@ class AddUserView(Frame):
         super().__init__(master)
         self.callback = callback  # add_employee()
         self.callback1 = callback1  # close_tab()
-        self.scallback2 = callback2  # show_err()
-        self.pack()
+        self.callback2 = callback2  # show_err()
+        self.pack(expand = True)
         
         # Defining widgets
-        self.lbl_name = tk.Label(self, text = "Name:")
-        self.lbl_name.grid(row = 0, column = 0)  
-        self.lbl_id = tk.Label(self, text = "ID:")
-        self.lbl_id.grid(row = 1, column = 0)
-        self.lbl_username = tk.Label(self, text = "Username:")
-        self.lbl_username.grid(row = 2, column = 0)        
-        self.lbl_pass = tk.Label(self, text = "Password:")
-        self.lbl_pass.grid(row = 3, column = 0)
+        self.lbl_name = Label(self, text = "Name:")
+        self.lbl_name.grid(row = 0, column = 0,
+                           padx = 10, pady = 10, sticky = "w")  
+        self.lbl_id = Label(self, text = "ID:")
+        self.lbl_id.grid(row = 1, column = 0,
+                         padx = 10, pady = 10, sticky = "w")
+        self.lbl_username = Label(self, text = "Username:")
+        self.lbl_username.grid(row = 2, column = 0,
+                               padx = 10, pady = 10, sticky = "w")        
+        self.lbl_pass = Label(self, text = "Password:")
+        self.lbl_pass.grid(row = 3, column = 0,
+                           padx = 10, pady = 10, sticky = "w")
         
         self.ent_name = tk.Entry(self)
         self.ent_name.grid(row = 0, column = 1)
@@ -38,14 +43,31 @@ class AddUserView(Frame):
         
         self.btn_submit = Button(self, text = "Submit",
                                     command = self.submit)
-        self.btn_submit.grid(row = 4, column = 0, columnspan = 2)
+        self.btn_submit.grid(row = 4, column = 0, columnspan = 2,
+                             padx = 10, pady = 10)
+        
+        self.ent_name.focus_set()
+        
+        # press Enter to go next, stop clickin!
+        self.entries = [ent for ent in self.winfo_children()
+                        if isinstance(ent, tk.Entry)]
+        self.ent_name.bind("<Return>",
+                               lambda _: self.entries[1].focus_set())
+        self.ent_id.bind("<Return>",
+                               lambda _: self.entries[2].focus_set())
+        self.ent_username.bind("<Return>",
+                               lambda _: self.entries[3].focus_set())        
+        self.ent_pass.bind("<Return>", lambda _: self.btn_submit.invoke())
         
     def submit(self):
         data = self.return_data()
-        if self.callback:  # sending data to main.py
-            result = self.callback(*data, self.callback2)
+        if self.callback:  
+            result = self.callback(*data)  # sending data to main.py
             self.clear()
-            if result:
+            if isinstance(result, str):  # means an error occured
+                if self.callback2:
+                    self.callback2("Error", result)
+            else:
                 if self.callback1:  # = if no err occured then close the tab.
                     self.callback1()
                 

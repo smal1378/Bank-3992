@@ -1,5 +1,6 @@
-from gui_configuration import Button, Frame
 import tkinter as tk
+from gui_configuration import Button, Frame, Label
+
 
 class EditMeView(Frame):
     '''
@@ -16,13 +17,15 @@ class EditMeView(Frame):
         self.callback = callback  # set_my_info()
         self.callback1 = callback1  # close_tab()
         self.callback2 = callback2
-        self.pack()
+        self.pack(expand = True)
         
         # Defining widgets
-        self.lbl_username = tk.Label(self, text = "Username:")
-        self.lbl_username.grid(row = 0, column = 0)        
-        self.lbl_pass = tk.Label(self, text = "Password:")
-        self.lbl_pass.grid(row = 1, column = 0)
+        self.lbl_username = Label(self, text = "Username:")
+        self.lbl_username.grid(row = 0, column = 0,
+                               padx = 10, pady = 10, sticky = "w")        
+        self.lbl_pass = Label(self, text = "Password:")
+        self.lbl_pass.grid(row = 1, column = 0,
+                           padx = 10, pady = 10, sticky = "w")
         
         self.ent_username = tk.Entry(self)
         self.ent_username.grid(row = 0, column = 1)
@@ -31,17 +34,28 @@ class EditMeView(Frame):
         
         self.btn_submit = Button(self, text = "Submit",
                                     command = self.submit)
-        self.btn_submit.grid(row = 2, column = 0, columnspan = 2)
+        self.btn_submit.grid(row = 2, column = 0, columnspan = 2,
+                             padx = 10, pady = 10)
         
         # Preview texts in entry based on self.username
         self.ent_username.insert(tk.END, self.username)
+        self.ent_username.focus_set()
+        
+        # press Enter to go next, stop clickin!
+        self.entries = [ent for ent in self.winfo_children()
+                        if isinstance(ent, tk.Entry)]
+        self.ent_username.bind("<Return>",
+                               lambda _: self.entries[1].focus_set())
+        self.ent_pass.bind("<Return>", lambda _: self.btn_submit.invoke())
 
     def submit(self):
         data = self.return_data()
-        if self.callback:  # sending data to main.py
-            result = self.callback(*data, self.callback2)
+        if self.callback:  
+            result = self.callback(*data)  # sending data to main.py
             self.clear()
-            if result:
+            if isinstance(result, str):  # means an error occured
+                self.callback2("Error", result)
+            else:
                 if self.callback1:  # = if no err occured then close the tab.
                     self.callback1()
     def return_data(self):
