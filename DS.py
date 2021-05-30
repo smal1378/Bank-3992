@@ -302,13 +302,14 @@ class Core:
         add_branch_employee(branch_name=string,
         username=string must be in users[employees])
         """
-
-        if branch_name not in self.users['branches']:
+        branch = self.users['branches'].get(branch_name)
+        employee = self.users['employees'].get(username)
+        if not branch:
             return 6  # there is no such a branch
-        if username not in self.users['employees']:
+        if not employee:
             return 3  # there is no such a username
-        self.users['branches'][branch_name].employees.append(username)
-        setattr(self.users['employees'][username], 'branch', branch_name)
+        branch.employees.append(username)
+        setattr(employee, 'branch', branch_name)
 
     def del_branch_employee(self, branch_name, username):
         if branch_name not in self.users['branches']:
