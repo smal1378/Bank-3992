@@ -92,8 +92,8 @@ class Core:
         return an object if exist else return 3 '''
         result = []
         if self.users.get(types):
-            user_ = self.users.get(types).get(username)
-            return user_ if user_ else 3
+            user_ = self.users.get(types).get(username, 3)
+            return user_
         if not only_with_types:
             for group in self.users:
                 user = self.users[group].get(username)
@@ -145,10 +145,10 @@ class Core:
         return self.users['accounts'][account_number].deposit(amount)
 
     def get_balance(self, account_number):
+        """if account exists return balance 
+        else return 2 There is no such a account"""
         account = self.users['accounts'].get(account_number)
-        if account:
-            return account.show_balance()
-        return 2  # there is no such a account_number
+        return account.show_balance() if account else 2
 
     def withdraw(self, account_number: int, amount: int):
         return self.users['accounts'][account_number].withdraw(amount)
@@ -194,8 +194,10 @@ class Core:
         del self.users['accounts'][account_number]
 
     def search_account(self, account_number):
-        account = self.users['accounts'].get(account_number)
-        return account if account else 2  # There is no such a account_number
+        """ return object if account exists 
+        else 2 (there is no such a account number)"""
+        account = self.users['accounts'].get(account_number, 2)
+        return account
 
 # =========================customer part===============================
 
@@ -216,9 +218,10 @@ class Core:
         '''
         var = vars()
         var.pop('self')
-        if username not in self.users['customers']:
+        customers = self.users['customers']
+        if username not in customers:
             customer = Customer(**var)
-            self.users['customers'][username] = customer
+            customers[username] = customer
             return customer
         return 4  # the username is already exists
 
@@ -236,9 +239,10 @@ class Core:
         '''
         var = vars()
         var.pop('self')
-        if username not in self.users['managers']:
+        managers = self.users['managers']
+        if username not in managers:
             manager = Manager(**var)
-            self.users['managers'][username] = manager
+            managers[username] = manager
             return manager
         return 4  # username laready exists
 
@@ -260,10 +264,10 @@ class Core:
         '''
         var = vars()
         var.pop('self')
-        if username not in self.users['employees']:
+        employees = self.users['employees']
+        if username not in employees:
             employee = Employee(**var)
-
-            self.users['employees'][username] = employee
+            employees[username] = employee
             return employee
         return 4  # username already exists
 
@@ -285,9 +289,10 @@ class Core:
         """
         var = vars()
         var.pop('self')
-        if name not in self.users['branches']:
+        branches = self.users['branches']
+        if name not in branches:
             branch = Branch(**var)
-            self.users['branches'][name] = branch
+            branches[name] = branch
             return branch
         return 4  # username already exists
 
@@ -315,30 +320,32 @@ class Core:
         setattr(employee, 'branch', branch_name)
 
     def del_branch_employee(self, branch_name, username):
-        if branch_name not in self.users['branches']:
+        branch = self.users['branches'].get(branch_name)
+        if not branch:
             return 6  # there is no such a branch
         if username not in self.users['employees']:
             return 3  # there is no such a username
-        employees = self.users['branches'][branch_name].employees
+        employees = branch.employees
         if username in employees:
             employees.remove(username)
 
     def change_branch_details(self, branch_name, **kwargs):
         branches = self.users['branches']
-        if branch_name in branches:
+        branch = branches[branch_name]
+        if branch:
             for key, value in kwargs.items():
                 if key == 'name':
                     branches[value] = branches.pop(branch_name)
                     branch_name = value
-                if hasattr(branches[branch_name], key):
-                    setattr(branches[branch_name], key, value)
+                if hasattr(branch, key):
+                    setattr(branch, key, value)
         else:
             return 6  # there is no such a branch
 
     def get_branch_employees(self, branch_name):
-        branches = self.users['branches']
-        if branch_name in branches:
-            return (i for i in self.users['branches'][branch_name].employees)
+        branch = self.users['branches'].get(branch_name)
+        if branch:
+            return (i for i in branch.employees)
         return 6  # there is no such a branch
 
     def set_branch_manager(self, branch_name, username):
