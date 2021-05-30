@@ -292,7 +292,10 @@ class Core:
         return 4  # username already exists
 
     def del_branch(self, username: str):
-        if username in self.users['branches']:
+        branch = self.users['branches'].get(username)
+        if branch:
+            for i in branch.employees:
+                self.user_detail_change(i, 'employees', branch='')
             del self.users['branches'][username]
         else:
             return 3  # there is no such a username
