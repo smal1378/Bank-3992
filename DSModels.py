@@ -11,9 +11,10 @@ from datetime import datetime
 
 @dataclass
 class User:
-    '''
+    """
     parent class for Manager, Employee and Customer
-    '''
+    """
+
     first_name: str
     last_name: str
     username: str
@@ -24,29 +25,31 @@ class User:
 
 @dataclass(repr=False)
 class Employee(User):
-    '''
+    """
     Employee(first_name:string ,last_name:string,username:string,
     password:string,ID:string,address:string,salary:integer,branch='')
-    '''
+    """
+
     salary: int
-    branch: str = ''
+    branch: str = ""
 
 
 class Manager(Employee):
-    '''
+    """
     Manager(first_name=string ,last_name:string,username=string,
     password=string,ID=string,address=string,salary=integer,branch='')
-    '''
+    """
 
 
 @dataclass
 class Customer(User):
-    '''
+    """
     Customer(first_name=string ,last_name=string,username=string,
     password=string,ID=string,address=string)
-    '''
+    """
+
     accounts: list[int] = field(default_factory=list)
-    __history = {'add_account': {}}
+    __history = {"add_account": {}}
 
     def __add_to_history(self, types, **kwargs):
         """
@@ -54,8 +57,8 @@ class Customer(User):
         add_account => (types=add_account,account_num=integer)
         """
         history_types = {
-            'add_account':
-            f'add account with number =>{kwargs.get("account_num")}'}
+            "add_account": f'add account with number =>{kwargs.get("account_num")}'
+        }
         sleep(0.00001)
         text = history_types.get(types)
         time = datetime.now()
@@ -64,7 +67,7 @@ class Customer(User):
 
     def add_account(self, account_num: int):
         self.accounts.append(account_num)
-        self.__add_to_history('add_account', account_num=account_num)
+        self.__add_to_history("add_account", account_num=account_num)
 
     def get_history(self, types=None):
         """yield all history if types is None else yield specific history"""
@@ -73,21 +76,21 @@ class Customer(User):
             for i in history.items():
                 yield i
         else:
-            for i in self. __history.values():
+            for i in self.__history.values():
                 for j in i.items():
                     yield j
 
 
-@ dataclass
+@dataclass
 class Account:
-    '''
+    """
     Account(balance=integer,owner=string,account_number=integer)
-    '''
+    """
+
     balance: int
     owner: str
     account_number: int
-    __history = {'withdraw': {}, 'deposit': {},
-                 'fund_transfer': {}, 'balance': {}}
+    __history = {"withdraw": {}, "deposit": {}, "fund_transfer": {}, "balance": {}}
 
     def __add_to_history(self, types: str, **kwargs):
         """
@@ -100,15 +103,15 @@ class Account:
         account_num= account number of sender or receiver)
         balance => (balance)
         """
-        history_types = {'withdraw': f'withdraw => {kwargs.get("amount")} ',
-                         'deposit': f'deposit => {kwargs.get("amount")} ',
-                         'transfer_withdraw':
-                         f'send = > {kwargs.get("amount")} to \
+        history_types = {
+            "withdraw": f'withdraw => {kwargs.get("amount")} ',
+            "deposit": f'deposit => {kwargs.get("amount")} ',
+            "transfer_withdraw": f'send = > {kwargs.get("amount")} to \
                           => {kwargs.get("account_num")}',
-                         'transfer_deposit':
-                         f'get => {kwargs.get("amount")} from \
+            "transfer_deposit": f'get => {kwargs.get("amount")} from \
                           => {kwargs.get("account_num")}',
-                         'balance': f'balance => {self.balance}'}
+            "balance": f"balance => {self.balance}",
+        }
         sleep(0.00001)
         time = datetime.now()
         text = history_types.get(types)
@@ -116,51 +119,51 @@ class Account:
             self.__history[types][time] = text
 
     def show_balance(self) -> int:
-        self.__add_to_history('balance')
+        self.__add_to_history("balance")
         return self.balance
 
     def withdraw(self, amount: int, history=True):
-        '''
+        """
         withdraw(amount=integer,history=if True add to history)
         return 1 if amount bigger than balance
         return 7 if amount is bigger or equal to 0
-        '''
+        """
         if amount > self.balance:
             return 1  # There is not enough money in your account
         elif amount <= 0:
             return 7  # number is smalller or equal to 0
         self.balance -= amount
         if history:
-            self.__add_to_history('withdraw', amount=amount)
+            self.__add_to_history("withdraw", amount=amount)
 
     def deposit(self, amount: int, history=True):
-        '''
+        """
         deposit(amount=integer,history=if True add to history)
         return 7 if amount is smaller or equal to 0
-        '''
+        """
         self.balance += amount
         if amount <= 0:
             return 7  # number is smaller or equal to 0
         if history:
-            self.__add_to_history('deposit', amount=amount)
+            self.__add_to_history("deposit", amount=amount)
 
     def fund_transfer(self, amount: int, account_num: int, types):
-        '''
+        """
         fund_transfer(amount=integer,
         account_num=sender or receiver account number ,
         types=choose transfer_withdraw if you send money
         else choose transfer_deposit))
         return 1 if amount bigger than balance
         return 7 if amount is bigger or equal to 0
-        '''
+        """
         var = vars()
-        var.pop('self')
-        if types == 'transfer_withdraw':
+        var.pop("self")
+        if types == "transfer_withdraw":
             result = self.withdraw(amount=amount, history=False)
             if result:
                 return result
             self.__add_to_history(**var)
-        elif types == 'transfer_deposit':
+        elif types == "transfer_deposit":
             result = self.deposit(amount=amount, history=False)
             if result:
                 return result
@@ -178,14 +181,15 @@ class Account:
                     yield j
 
 
-@ dataclass
+@dataclass
 class Branch:
-    '''
+    """
     Branch(address=string,name=string)
-    '''
+    """
+
     address: str
     name: str
-    manager: str = ''
+    manager: str = ""
     employees: list[int] = field(default_factory=list)
 
 
