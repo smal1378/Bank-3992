@@ -10,10 +10,13 @@ Welcome to bank-3992's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+
 DS models
 =========
 .. automodule:: DSModels
    :members:
+   :undoc-members:
+   :show-inheritance:
 
 DS Core
 =======
