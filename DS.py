@@ -56,7 +56,7 @@ class Core:
         users = self.users[types]
         if new_username in users:
             return 4  # username already exists
-        if users.get(old_username):
+        if old_username in users:
             users[new_username] = users.pop(old_username)
             setattr(users[new_username], 'username', new_username)
             if types == 'customers':
