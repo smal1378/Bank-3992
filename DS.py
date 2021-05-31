@@ -24,13 +24,13 @@ class Core:
     Core part of DS
     """
 
-    default_admin = Admin("admin", "admin")
+    __default_admin = Admin("admin", "admin")
     users = {
         "customers": {},
         "employees": {},
         "accounts": {},
         "branches": {},
-        "admin": {"admin": default_admin},
+        "admin": {"admin": __default_admin},
         "managers": {},
     }
     # ============================admin part=================================
