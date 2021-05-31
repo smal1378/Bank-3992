@@ -47,11 +47,6 @@ def search_manager_callback(username):
         return [(user.name, user.id)]
 
 
-def manager_detail_change_callback(username, **kwargs):
-    user = database.user_detail_change(username, **kwargs)
-    if user == 3:
-        return 3
-
 
 def add_employee_callback(name, username, ID, password):
     employee = database.create_employee(name, username, ID, password)
