@@ -3,7 +3,7 @@ in This Module we define an api for the main.py
 methods in Core object must be able to do anything we need the backend do
 other classes, functions or constants can be defined for internal use.
 """
-from DSModels import Account, Customer, Branch, Employee, Manager
+from DSModels import Account, Customer, Branch, Employee, Manager, Admin
 from dataclasses import dataclass
 from random import randint
 
@@ -32,29 +32,22 @@ class Core:
 
     def set_admin(self, username: str, password: str):
         '''set_admin also can be used for change password or username'''
-        self.users['admin'] = {'username': username, 'password': password}
-
+        self.users['admin'][username] = Admin(username, password)
 # ===========================global part=================================
 
     def check_login(self, username: str, password: str, types: str):
         '''
         check_login(username=string,password=string,
-        type=between (customers,empolyees,managers,admin))
-        return True if admin else False
+        type=(customers,empolyees,managers,admin))
         return object if exists
         else return 3 (There is no such a username)
-
         '''
-        users = self.users[types]
-        if types == 'admin':
-            return users['username'] == username and (
-                users['password'] == password)
-        if username in users and (
-                password == users[username].password):
-            return users[username]
+        user = self.users[types].get(username)
+        if user and (password == user.password):
+            return user
         return 3  # There is no such a username
 
-    def change_username(self, old_username, new_username, types):
+    def change_username(self, old_username: str, new_username: str, types):
         '''
         change_username(old_username=string,new_username=string,types=(customers,branches,employees,managers))
         return 4 if username already exists
@@ -88,7 +81,8 @@ class Core:
 
     def search_user(self, username: str, types=None, only_with_types=False):
         '''
-        search_user(username=string,types=(customers,branches,employees,managers))
+        search_user(username=string,types=(customers,branches,employees,managers)
+        only_with_types=True if only search with type)
         return an object if exist else return 3 '''
         result = []
         if self.users.get(types):
@@ -145,7 +139,7 @@ class Core:
         return self.users['accounts'][account_number].deposit(amount)
 
     def get_balance(self, account_number):
-        """if account exists return balance 
+        """return balance if account exists
         else return 2 There is no such a account"""
         account = self.users['accounts'].get(account_number)
         return account.show_balance() if account else 2
@@ -157,6 +151,8 @@ class Core:
         """
         funds_transfer(sender=account number of sender,
         receiver=account number of receiver,amount=integer)
+        return 1 if amount bigger than balance
+        return 7 if amount is bigger or equal to 0
         """
         send = self.users['accounts'][sender].fund_transfer(
             amount=amount, account_num=receiver, types='transfer_withdraw')
@@ -174,9 +170,7 @@ class Core:
         return all history if not specified else return specified history
         '''
         account = self.users['accounts'][account_number]
-        if types is None:
-            return (j for i in account.history.values() for j in i.items())
-        return (i for i in account.history[types].items())
+        account.get_history(types=types)
 
     def get_account_numbers(self, username: str):
         ''' return list of accounts number'''
@@ -193,28 +187,27 @@ class Core:
         self.users['customers'][owner].accounts.remove(account_number)
         del self.users['accounts'][account_number]
 
-    def search_account(self, account_number):
-        """ return object if account exists 
+    def search_account(self, account_number: int):
+        """ return object if account exists
         else 2 (there is no such a account number)"""
         account = self.users['accounts'].get(account_number, 2)
         return account
 
 # =========================customer part===============================
 
-    def customer_history(self, username: str):
+    def customer_history(self, username: str, types=None):
         """ return histoy if username exists
         else 3 (there is no such a user name ) """
         customer = self.users['customers'].get(username)
-        # there is no such a username
-        return (j for i in customer.history.values() for j in i.items())\
-            if customer else 3
+        if customer:
+            customer.get_history(types=types)
+        return 3  # there is no such a username
 
     def create_customer(self, first_name: str, last_name: str, username: str,
                         password: str, ID: str, address: str):
         '''
-        Customer(first_name:string ,last_name:string,username:string,
-        password:string,ID:string,address:string)
-        return 4 if username exists else return object of customer
+        return 4 if username exists
+        else return object
         '''
         var = vars()
         var.pop('self')
@@ -232,9 +225,7 @@ class Core:
     def create_manager(self, first_name: str, last_name: str, username: str,
                        password: str, ID: str, address: str, salary: int):
         '''
-        Manager(first_name:string ,last_name:string,username:string,
-        password:string,ID:string,address:string,salary:integer)
-        return manager obj if already not exists
+        return object if already not exists
         else return 4(username already exists)
         '''
         var = vars()
@@ -258,9 +249,8 @@ class Core:
                         password: str, ID: str,
                         address: str, salary: int):
         '''
-        Employee(first_name:string ,last_name:string,username:string,
-        password:string,ID:string,address:string,salary:integer)
-        return 4 if username already exists else return employee obj
+        return 4 if username already exists
+        else return employee obj
         '''
         var = vars()
         var.pop('self')
@@ -271,7 +261,8 @@ class Core:
             return employee
         return 4  # username already exists
 
-    def del_employee(self, username):
+    def del_employee(self, username: str):
+        """return 3 if There is no such a username"""
         employees = self.users['employees']
         if username in employees:
             branch = self.user[username].branch
@@ -284,8 +275,8 @@ class Core:
 # ==========================branch part===============================
     def create_branch(self, name: str, address: str):
         """
-        branch(name=string,address=string)
-        return 4 if username already exists else return object
+        return 4 if username already exists
+        else return object
         """
         var = vars()
         var.pop('self')
@@ -305,10 +296,10 @@ class Core:
         else:
             return 3  # there is no such a username
 
-    def add_branch_employee(self, branch_name, username):
+    def add_branch_employee(self, branch_name: str, username: str):
         """
         add_branch_employee(branch_name=string,
-        username=string must be in users[employees])
+        username=must be in users[employees])
         """
         branch = self.users['branches'].get(branch_name)
         employee = self.users['employees'].get(username)
@@ -319,7 +310,11 @@ class Core:
         branch.employees.append(username)
         setattr(employee, 'branch', branch_name)
 
-    def del_branch_employee(self, branch_name, username):
+    def del_branch_employee(self, branch_name: str, username: str):
+        """
+        return 6 if there is no such a branch
+        return 3 if there is no such a username
+        """
         branch = self.users['branches'].get(branch_name)
         if not branch:
             return 6  # there is no such a branch
@@ -329,7 +324,8 @@ class Core:
         if username in employees:
             employees.remove(username)
 
-    def change_branch_details(self, branch_name, **kwargs):
+    def change_branch_details(self, branch_name: str, **kwargs):
+        """return 6 if there is no such a branch"""
         branches = self.users['branches']
         branch = branches[branch_name]
         if branch:
@@ -343,6 +339,9 @@ class Core:
             return 6  # there is no such a branch
 
     def get_branch_employees(self, branch_name):
+        """
+        return 6 if there is no such a branch
+        else return branch employees"""
         branch = self.users['branches'].get(branch_name)
         if branch:
             return (i for i in branch.employees)
@@ -350,7 +349,9 @@ class Core:
 
     def set_branch_manager(self, branch_name, username):
         """set_branch_manager(branch_name=must be in users[branch],
-        username=must be in users[managers])"""
+        username=must be in users[managers])
+        return 6 if there is no such a branch
+        return 3 if there is no such a username"""
         branches = self.users['branches']
         if branch_name not in branches:
             return 6  # there is no such a branch
