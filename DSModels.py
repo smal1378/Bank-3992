@@ -57,7 +57,8 @@ class Customer(User):
         add_account => (types=add_account,account_num=integer)
         """
         history_types = {
-            "add_account": f'add account with number =>{kwargs.get("account_num")}'
+            "add_account":
+            f'add account with number =>{kwargs.get("account_num")}'
         }
         sleep(0.00001)
         text = history_types.get(types)
@@ -90,7 +91,12 @@ class Account:
     balance: int
     owner: str
     account_number: int
-    __history = {"withdraw": {}, "deposit": {}, "fund_transfer": {}, "balance": {}}
+    __history = {
+        "withdraw": {},
+        "deposit": {},
+        "fund_transfer": {},
+        "balance": {},
+    }
 
     def __add_to_history(self, types: str, **kwargs):
         """
