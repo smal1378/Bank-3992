@@ -21,12 +21,12 @@ class Core:
     '''
     Core part of DS
     '''
-
+    default_admin = Admin('admin', 'admin')
     users = {'customers': {},
              'employees': {},
              'accounts': {},
              'branches': {},
-             'admin': '',
+             'admin': {'admin': default_admin},
              'managers': {}}
 # ============================admin part=================================
 
@@ -49,7 +49,8 @@ class Core:
 
     def change_username(self, old_username: str, new_username: str, types):
         '''
-        change_username(old_username=string,new_username=string,types=(customers,branches,employees,managers))
+        change_username(old_username=string,new_username=string,
+        types=(customers,branches,employees,managers,admin))
         return 4 if username already exists
         return 3 if There is no such a username
         '''
@@ -70,7 +71,7 @@ class Core:
                         new_password: str, types):
         '''
         change_password(username=string,old_paasword=string,new_password=str,
-        types=(customers,branches,employees,managers))
+        types=(customers,branches,employees,managers,admin))
         return 5 if password is wrong
         '''
         user = self.users[types][username]
