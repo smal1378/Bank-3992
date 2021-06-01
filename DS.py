@@ -73,7 +73,7 @@ class Core:
             return 5  # password is wrong
 
     def search_user(self, username: str, types=None):
-        '''
+        '''`q
         search_user(username=string,types=(customers,branches,employees,managers))
         return an object if exist else return 3 '''
         if types in self.users:
