@@ -4,6 +4,7 @@
 - user_detail_change(username, **kwargs)
 - get_user(username)
 ###### branchs:
+- all_branchs()
 - create_branch(name, address)
 - del_branch(name)
 - change_branch(name, new_name=None, new_address=None)
@@ -41,6 +42,7 @@
 - all_employees() -> list[(name, username)]
 - all_customers() -> list[(name, username)]
 - all_managers() -> list[(name, username)]
+- all_branchs() -> list[(branch_name)]
 - new_manager(name, id, username, password)
 - set_manager(branch_name, manager_username)
 - change_manager(old_username, id=None, username=None, password=None, name=None)
