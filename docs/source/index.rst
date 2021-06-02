@@ -10,6 +10,7 @@ Welcome to bank-3992's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   DS
 
 DS models
 =========
