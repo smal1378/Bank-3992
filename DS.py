@@ -65,11 +65,16 @@ class Core:
             return 4  # username already exists
         if old_username in users:
             users[new_username] = users.pop(old_username)
-            setattr(users[new_username], "username", new_username)
+            user = users[new_username]
+            setattr(user, "username", new_username)
             if types == "customers":
-                for account in users[new_username].accounts:
+                for account in user.accounts:
                     setattr(self.users["accounts"][account],
                             "owner", new_username)
+            if types == 'branches':
+                for employee in user.employees:
+                    employee = self.users['employees'][employee]
+                    setattr(employee, 'branch', new_username)
         else:
             return 3  # There is no such a username
 
@@ -78,7 +83,7 @@ class Core:
     ):
         """
         change_password(username=string,old_paasword=string,new_password=str,
-        types=(customers,branches,employees,managers,admin))
+        types=(customers,employees,managers,admin))
         return 5 if password is wrong
         """
         user = self.users[types][username]
@@ -105,15 +110,17 @@ class Core:
 
     def user_detail_change(self, username, types, **kwargs):
         """
-        User(first_name=string,last_name=string,ID=string,address=string)
+        User(first_name=string,last_name=string,
+        ID=string,address=string,password=string)
         Manager(salary=integer)
         employee(salary=integer)
+        admin(password=string)
+        branch(address)
         """
         user = self.search_user(username, types, only_with_types=True)
         if user == 3:
             return 3  # there is no such a username
         for key, value in kwargs.items():
-
             if hasattr(user, key):
                 setattr(user, key, value)
 
@@ -180,7 +187,7 @@ class Core:
         return all history if not specified else return specified history
         """
         account = self.users["accounts"][account_num]
-        account.get_history(types=types)
+        return account.get_history(types=types)
 
     def get_account_numbers(self, username: str):
         """ return list of accounts number"""
@@ -210,7 +217,7 @@ class Core:
         else 3 (there is no such a user name )"""
         customer = self.users["customers"].get(username)
         if customer:
-            customer.get_history(types=types)
+            return customer.get_history(types=types)
         return 3  # there is no such a username
 
     def create_customer(
@@ -296,7 +303,7 @@ class Core:
         """return 3 if There is no such a username"""
         employees = self.users["employees"]
         if username in employees:
-            branch = self.user[username].branch
+            branch = employees[username].branch
             if branch:
                 self.del_branch_employee(branch, username)
             del employees[username]
@@ -355,20 +362,6 @@ class Core:
         if username in employees:
             employees.remove(username)
 
-    def change_branch_details(self, branch_name: str, **kwargs):
-        """return 6 if there is no such a branch"""
-        branches = self.users["branches"]
-        branch = branches[branch_name]
-        if branch:
-            for key, value in kwargs.items():
-                if key == "name":
-                    branches[value] = branches.pop(branch_name)
-                    branch_name = value
-                if hasattr(branch, key):
-                    setattr(branch, key, value)
-        else:
-            return 6  # there is no such a branch
-
     def get_branch_employees(self, branch_name):
         """
         return 6 if there is no such a branch
@@ -389,3 +382,6 @@ class Core:
         if username not in self.users["managers"]:
             return 3  # there is no such a username
         setattr(branches[branch_name], "manager", username)
+
+    def get_all_branches(self):
+        return (i for i in self.users['branches'].values())

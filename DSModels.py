@@ -1,4 +1,4 @@
-""" collection on all models used in DS.py include
+""" collection on all modelsnused in DS.py include
 User => a parent class for Employee,Customer
 Manager => this class is same as Employee class and
 its parent class in Employee
@@ -121,6 +121,8 @@ class Account:
         sleep(0.00001)
         time = datetime.now()
         text = history_types.get(types)
+        if 'transfer' in types:
+            types = 'fund_transfer'
         if text:
             self.__history[types][time] = text
 
