@@ -1,5 +1,5 @@
 # this file is going to connect DS module and GUI
-from manager_view import ManagerView
+from GUI import manager_view
 from AdminView import AdminView
 from DS import Core
 
@@ -26,8 +26,10 @@ def check_login(username, password, type):
     if user == 3:
         return 3
     elif type == "customer":
+        current_user = username
         pass
     elif type == "employee":
+        current_user = username
         pass
     elif type == "admin":
         current_user = username
@@ -35,9 +37,14 @@ def check_login(username, password, type):
         admin_panel = AdminView(username, )
         admin_panel.mainloop()
     else:
-        man_panel = ManagerView(callback1=add_employee_callback, callback2=del_employee_callback,
-                                callback3=change_employee_callback, callback4=open_panel_employee_callback,
-                                callback5=search_manager_callback)
+        current_user = username
+        mng = search_manager_callback(username)
+        man_panel = manager_view.ManagerView(name=mng.first_name, username=current_user,
+                                             list_employees=all_employee_callback,
+                                             callback1=add_employee_callback,
+                                             callback2=del_employee_callback,
+                                             callback3=change_employee_callback, callback4=open_panel_employee_callback,
+                                             callback5=search_manager_callback, callback6=set_my_info_callback)
         man_panel.mainloop()
 
 
@@ -85,18 +92,10 @@ def set_manager_callback(branch_name, manager_username):
         return 3
 
 
-def change_manager_callback(old_username, id=None, username=None, password=None, name=None, type="manager"):
-    if username:
-        user = database.change_username(old_username, username, type)
-        user1 = database.user_detail_change(old_username, id=id, password=password, name=name)
-        if user1 == 3:
-            return
-        elif user == 4:
-            return 4
-    else:
-        user = database.user_detail_change(old_username, id=id, password=password, name=name)
-        if user == 3:
-            return 3
+def change_manager_callback(old_username, id=None, username=None, password=None, name=None):
+    mng = database.user_detail_change(old_username, ID=id, first_name=name, new_username=username,
+                                      new_password=password)
+    return mng
 
 
 def del_manager_callback():
@@ -104,18 +103,10 @@ def del_manager_callback():
 
 
 # ================================ Manager callback =================================
-def change_employee_callback(old_username, type="employee", username=None, id=None, password=None, name=None):
-    if username:
-        user = database.change_username(old_username, username, type)
-        user1 = database.user_detail_change(old_username, id=id, password=password, name=name)
-        if user1 == 3:
-            return
-        elif user == 4:
-            return 4
-    else:
-        user = database.user_detail_change(old_username, id=id, password=password, name=name)
-        if user == 3:
-            return 3
+def change_employee_callback(old_username, username=None, id=None, password=None, name=None):
+    emp = database.user_detail_change(old_username, new_username=username, ID=id, new_password=password,
+                                      first_name=name)
+    return emp
 
 
 def search_manager_callback(username):
@@ -144,11 +135,50 @@ def all_employee_callback():
         yield [employee.first_name, employee.username]
 
 
+def set_my_info_callback():
+    pass
+
+
 def open_panel_employee_callback(username):
     pass
 
 
 # ================================ Customer callback =================================
+def receive_cash_callback(account_number, amount):
+    account_number = database.search_account(account_number)
+    if account_number == 2:
+        return dict_error[2]
+    else:
+        database.withdraw(account_number, amount)
+
+
+def all_accounts_callback():
+    account_number = database.all_accounts(current_user)
+    return account_number
+
+
+def transfer_callback(account_number, destination_number, amount):
+    account_number = database.search_account(account_number)
+    if account_number == 2:
+        return account_number
+    else:
+        database.funds_transfer(account_number,
+                                destination_number, amount)
+
+
+def get_history_callback(account_number):
+    account_number = database.search_account(account_number)
+    if account_number == 2:
+        return account_number
+    else:
+        database.account_history(account_number)
+
+
+def change_info_callback(username=None, password=None):
+    cus = database.user_detail_change(current_user, new_username=username, new_password=password)
+    return cus
+
+
 # ================================ employee callback =================================
 def all_customers_callback():
     cus = database.get_all_customers()
@@ -156,7 +186,7 @@ def all_customers_callback():
         yield [customer.first_name, customer.ID]
 
 
-def search_customers_callback(text, type="customer"):
+def search_customers_callback(text):
     pass
 
 
@@ -181,15 +211,11 @@ def get_customer_info_callback(username, type="customer"):
         return [cus.first_name, cus.ID, cus.birthday]
 
 
-def set_customer_info_callback(old_username, username=None, type="customer", id=None, name=None, birthday=None,
+def set_customer_info_callback(old_username, username=None, id=None, name=None, birthday=None,
                                password=None):
-    if username:
-        cus = database.change_username(old_username, username, type)
-        cus2 = database.user_detail_change(old_username, id=id, first_name=name, birthday=birthday)
-        return cus, cus2
-    elif password:
-        cus = database.change_password(old_username, current_password, password, type)
-        return cus
+    cus = database.user_detail_change(old_username, new_username=username, new_password=password, first_name=name,
+                                      birthday=birthday, ID=id)
+    return cus
 
 
 def open_customer_panel_callback(username):
@@ -202,13 +228,14 @@ def creat_customer_callback(name, username, id, birthday, password):
         return 4
 
 
-def set_my_info(username=None, password=None):
+def set_my_info_employee(username=None, password=None):
     if username:
         emp = database.change_username(current_user, username, "employee")
         return emp
     elif password:
         emp = database.change_password(current_user, current_password, password, "employee")
         return emp
+
 
 # ================================ Branch =================================
 
