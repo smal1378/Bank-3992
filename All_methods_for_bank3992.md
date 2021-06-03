@@ -1,5 +1,4 @@
 
-
 # Core:
 ###### global users:
 - user_detail_change(username, **kwargs)
