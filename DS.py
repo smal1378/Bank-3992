@@ -80,14 +80,6 @@ class Core:
         else:
             return 3  # There is no such a username
 
-    def search_user(self, username: str, types=None):
-        '''`q
-        search_user(username=string,types=(customers,branches,employees,managers))
-        return an object if exist else return 3 '''
-        if types in self.users:
-            if username in self.users[types]:
-                return self.users[types][username]
-
     def change_password(
         self, username: str, old_password: str, new_password: str, types
     ):
@@ -99,7 +91,6 @@ class Core:
         user = self.__users[types][username]
         if old_password == user.password:
             setattr(user, "password", new_password)
-
         else:
             return 5  # password is wrong
 
