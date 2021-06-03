@@ -57,8 +57,7 @@ class Customer(User):
         add_account => (types=add_account,account_num=integer)
         """
         history_types = {
-            "add_account":
-            f'add account with number =>{kwargs.get("account_num")}'
+            "add_account": f'add account with number =>{kwargs.get("account_num")}'
         }
         sleep(0.00001)
         text = history_types.get(types)
@@ -72,14 +71,11 @@ class Customer(User):
 
     def get_history(self, types=None):
         """yield all history if types is None else yield specific history"""
-        history = self.__history.get(types)
-        if history:
-            for i in history.items():
-                yield i
-        else:
-            for i in self.__history.values():
-                for j in i.items():
-                    yield j
+        all_types = self.__history.keys()
+        history = self.__history.copy()
+        if types in all_types:
+            all_types = [types]
+        return map(lambda i: history[i].values(), all_types)
 
 
 @dataclass
@@ -121,8 +117,8 @@ class Account:
         sleep(0.00001)
         time = datetime.now()
         text = history_types.get(types)
-        if 'transfer' in types:
-            types = 'fund_transfer'
+        if "transfer" in types:
+            types = "fund_transfer"
         if text:
             self.__history[types][time] = text
 
@@ -168,25 +164,19 @@ class Account:
         var.pop("self")
         if types == "transfer_withdraw":
             result = self.withdraw(amount=amount, history=False)
-            if result:
-                return result
-            self.__add_to_history(**var)
         elif types == "transfer_deposit":
             result = self.deposit(amount=amount, history=False)
-            if result:
-                return result
-            self.__add_to_history(**var)
+        if result:
+            return result
+        self.__add_to_history(**var)
 
     def get_history(self, types=None):
         """return all history if types None else return specific history"""
-        history = self.__history.get(types)
-        if history:
-            for i in history.items():
-                yield i
-        else:
-            for i in self.__history.values():
-                for j in i.items():
-                    yield j
+        all_types = self.__history.keys()
+        history = self.__history.copy()
+        if types in all_types:
+            all_types = [types]
+        return map(lambda i: history[i].values(), all_types)
 
 
 @dataclass
