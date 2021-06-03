@@ -160,7 +160,7 @@ def all_accounts_callback():
 def transfer_callback(account_number, destination_number, amount):
     account_number = database.search_account(account_number)
     if account_number == 2:
-        return account_number
+        return dict_error[2]
     else:
         database.funds_transfer(account_number,
                                 destination_number, amount)
@@ -169,9 +169,9 @@ def transfer_callback(account_number, destination_number, amount):
 def get_history_callback(account_number):
     account_number = database.search_account(account_number)
     if account_number == 2:
-        return account_number
+        return dict_error[2]
     else:
-        database.account_history(account_number)
+        return database.account_history(account_number)
 
 
 def change_info_callback(username=None, password=None):
