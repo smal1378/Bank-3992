@@ -72,7 +72,7 @@ class Customer(User):
 
     def get_history(self, types=None):
         """yield all history if types is None else yield specific history"""
-        history = self.__history.get(types)
+        history = self.__history.copy().get(types)
         if history:
             for i in history.items():
                 yield i
@@ -179,7 +179,7 @@ class Account:
 
     def get_history(self, types=None):
         """return all history if types None else return specific history"""
-        history = self.__history.get(types)
+        history = self.__history.copy().get(types)
         if history:
             for i in history.items():
                 yield i
