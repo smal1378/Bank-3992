@@ -1,4 +1,4 @@
-from customer_view import CustomerView
+from GUI_Modules.customer.gui_customer import CustomerView
 from employee_view import EmployeeView
 from manager_view import ManagerView
 from admin_view import AdminView

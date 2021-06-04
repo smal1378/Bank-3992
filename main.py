@@ -1,6 +1,6 @@
-# this file is going to connect DS module and GUI
-from GUI import manager_view
-from AdminView import AdminView
+# this file is going to connect DS module and GUI_Modules
+from GUI_Modules import manager_view
+from GUI_Modules.AdminView import AdminView
 from DS import Core
 
 dict_error = {
