@@ -1,10 +1,10 @@
-from tkinter import *
+import tkinter.messagebox
 import tkinter as tk
 from tkinter import ttk
-from GUI_Modules.manager1 import EditManager
-from gui_configuration import Tk, Frame
-from GUI_Modules.branch import EditBranch
-from GUI_Modules.change_my_info import Change_my_info
+from GUI_Modules.admin.manager1 import EditManager
+from ..gui_configuration import Tk, Frame, Button
+from GUI_Modules.admin.branch import EditBranch
+from GUI_Modules.admin.change_my_info import ChangeMyInfo
 
 
 class AdminView(Tk):
@@ -202,9 +202,9 @@ class AdminView(Tk):
         b = self.tab_change_my_info.winfo_b()
         if b:
             return None
-        panel = Change_my_info(self.username, self.tab_change_my_info,
-                               self.callback1,
-                               self.close_tab, self.msg_err)
+        panel = ChangeMyInfo(self.username, self.tab_change_my_info,
+                             self.callback1,
+                             self.close_tab, self.msg_err)
         self.tabs.add(self.tab_change_my_info, text="Edit-me menu")
 
     def run(self):

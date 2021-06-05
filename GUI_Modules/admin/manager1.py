@@ -1,4 +1,4 @@
-from gui_configuration import Button, Frame
+from ..gui_configuration import Button, Frame
 import tkinter as tk
 
 

@@ -7,7 +7,7 @@
 - all_branchs()
 - create_branch(name, address)
 - del_branch(name)
-- change_branch(name, new_name=None, new_address=None)
+- change_branch(name, new_name=None, new_address=None)  # omitted for now
 - all_branch_employees(branch_name)
 - set_branch_manager(branch_name, manager_username)
 ###### accounts:
@@ -56,7 +56,7 @@
 - open_employee_panel(username)
 
 # GUI Customer Callbacks:
-- all_accounts() # this will only return account numbers for this customer
+- all_accounts() # this will return account (numbers, amount) for this customer
 - receive_cash(account_number, amount)
 - transfer(account_number, destination_number, amount)
 - get_history(account_number) -> list[string]

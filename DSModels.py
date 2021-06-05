@@ -7,6 +7,7 @@ Employee => parent class for Manager
 from time import sleep
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import List
 
 
 @dataclass
@@ -48,7 +49,7 @@ class Customer(User):
     password=string,ID=string,address=string)
     """
 
-    accounts: list[int] = field(default_factory=list)
+    accounts: List[int] = field(default_factory=list)
     __history = {"add_account": {}}
 
     def __add_to_history(self, types, **kwargs):
@@ -57,7 +58,8 @@ class Customer(User):
         add_account => (types=add_account,account_num=integer)
         """
         history_types = {
-            "add_account": f'add account with number =>{kwargs.get("account_num")}'
+            "add_account": f'add account with number'
+                           f' =>{kwargs.get("account_num")}'
         }
         sleep(0.00001)
         text = history_types.get(types)
@@ -96,7 +98,8 @@ class Account:
 
     def __add_to_history(self, types: str, **kwargs):
         """
-        __add_to_history(types=(withdraw,deposit,fund_transfer_withdraw,fund_transfer_deposit,balance))
+        __add_to_history(types=(withdraw,deposit,fund_transfer_withdraw,
+        fund_transfer_deposit,balance))
         withdraw => (withdraw,amount=integer)
         deposit => (deposit,amount=integer)
         transfer_deposit => (fund_transfer_deposit,amount=integer,
@@ -166,6 +169,9 @@ class Account:
             result = self.withdraw(amount=amount, history=False)
         elif types == "transfer_deposit":
             result = self.deposit(amount=amount, history=False)
+        else:
+            raise TypeError("Exception added by Esmail to avoid "
+                            "'variable not defined' Error")
         if result:
             return result
         self.__add_to_history(**var)
@@ -188,7 +194,7 @@ class Branch:
     address: str
     name: str
     manager: str = ""
-    employees: list[int] = field(default_factory=list)
+    employees: List[int] = field(default_factory=list)
 
 
 @dataclass

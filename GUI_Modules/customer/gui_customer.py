@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from Daryaft import Daryaft1
-from Enteghal import Enteghal1
-from Mojoodi import Mojoodi1
-from Edit import Edit1
+from .Daryaft import Daryaft1
+from .Enteghal import Enteghal1
+from .Mojoodi import Mojoodi1
+from .Edit import Edit1
 from ..gui_configuration import Tk, Button, Frame, Label
 import random
 import time

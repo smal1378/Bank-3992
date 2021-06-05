@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui_configuration import Button, Frame, Label
+from ..gui_configuration import Button, Frame, Label
 
 
 class EditUserView(Frame):

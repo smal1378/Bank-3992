@@ -10,7 +10,7 @@ from random import randint
 dict_error = {
     1: "There is not enough money in your account",
     2: "There is no such a account number ",
-    3: "There is no such a username ",
+    3: "Username or Password is incorrect",
     4: "The username  already exists",
     5: "Password is wrong",
     6: "There is no such a branch",
@@ -41,16 +41,30 @@ class Core:
 
     # ===========================global part=================================
 
-    def check_login(self, username: str, password: str, types: str):
+    def check_login(self, username: str, password: str):
         """
         check_login(username=string,password=string,
-        type=(customers,empolyees,managers,admin))
-        return object if exists
+        type=(customer, empoloyee,manager,admin))
+        return (object, type) if exists
         else return 3 (There is no such a username)
         """
-        user = self.__users[types].get(username)
+        if username in self.__users["customers"]:
+            user = self.__users["customers"].get(username)
+            _type = "customer"
+        elif username in self.__users["employees"]:
+            user = self.__users["employess"].get(username)
+            _type = "employee"
+        elif username in self.__users["managers"]:
+            user = self.__users["managers"].get(username)
+            _type = "manager"
+        elif username in self.__users["admin"]:
+            user = self.__users["admin"].get(username)
+            _type = "admin"
+        else:
+            return 3
+
         if user and (password == user.password):
-            return user
+            return user, _type
         return 3  # There is no such a username
 
     def change_username(self, old_username: str, new_username: str, types):
